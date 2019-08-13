@@ -34,8 +34,11 @@ typedef struct
 
 void main()
 {
-
- 
+struct rec
+	{
+	char raw_buf[3];
+};
+   struct rec my_record; 
    header head;
    headerInfo headInfo;
  int counter=0;
@@ -67,36 +70,20 @@ printf("%d ",sizeof(unsigned char));
 printf("\n");
 
 fseek(leftpixel,54,SEEK_SET);
-pixel im[480][640];
-
+pixel im[128][128];
+//fread(&my_record,sizeof(struct rec),1,ptr_myfile);
+//fread(&my_record,sizeof(struct rec),1,leftpixel);
 int i,j;
 
-          for (i = 0; i < 480; i++) {
-        for (j = 0; j < 640; j++) {
+          for (i = 0; i < 128; i++) {
+        for (j = 0; j < 128; j++) {
+            fread(&my_record,sizeof(struct rec),1,leftpixel);
+            printf("%d %d %d %d %d\n",i,j,my_record.raw_buf[0],my_record.raw_buf[1],my_record.raw_buf[2]);
+ }
+}
 
-           fread(&im[i][j], sizeof(unsigned char),headInfo.pixelsize, leftpixel);
- if(im[i][j].Red>(im[i][j].Green+im[i][j].Blue))
- //printf("0x%x \n",im[i][j]);
-         {
-counter++;
+
+
+
  
-
-         }    
-}
-}
-
-
-
-
-    printf("counter =%d ", counter); 
-
-    printf("\n");
-    /*
-    for(i=0;i<256;i++) {
-		for(j=0;j<256;j++) {
-			printf("0x%x " ,im[i][j]);
-		}
-	}
-	printf("\n");
-	*/ 
 }  
