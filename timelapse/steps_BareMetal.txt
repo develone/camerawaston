@@ -1,0 +1,43 @@
+
+Testing bare metal on RPi3B.
+The jpeg2000 is C called by bare metal
+sent the frame0000.bmp to 192.168.1.247
+
+devel@mypi3-8:~/camerawatson/timelapse/frames $ tftp 192.168.1.247
+tftp> binary
+tftp> put frame0000.bmp
+Sent 49206 bytes in 0.2 seconds
+tftp> quit
+devel@mypi3-8:~/camerawatson/timelapse/frames $ telnet 192.168.1.247
+Trying 192.168.1.247...
+Connected to 192.168.1.247.
+Escape character is '^]'.
+
+The MyBitmap.bmp needs to be removed and frame0000.bmp put in place 
+
+C:\>del MyBitmap.bmp
+ 
+copy frame0000.bmp MyBitmap.bmp 
+
+C:\frame0000.bmp00.bmp MyBitmap.bmp
+          1 file(s) copied
+
+
+C:\>del kernel7.img
+C:\k3.imgk3.img kernel7.img
+          1 file(s) copied
+
+Restarting in 1000 milliseconds
+C:\>Connection closed by foreign host.
+devel@mypi3-8:~/camerawatson/timelapse/frames $ tftp 192.168.1.247
+tftp> binary
+tftp> get test.j2k
+Received 409 bytes in 0.2 seconds
+tftp> quit
+devel@mypi3-8:~/camerawatson/timelapse/frames $ /clusterfs/t_ultibo/build/bin/opj_decompress -i test.j2k -o xx.bmp
+
+[INFO] Start to read j2k main header (28016208).
+[INFO] Main header has been correctly decoded.
+[INFO] No decoded area parameters, set the decoded area to the whole image
+[INFO] Header of tile 1 / 1 has been read.
+[INFO] Generated Outfile xx.bmp
