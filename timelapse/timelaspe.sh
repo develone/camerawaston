@@ -4,8 +4,8 @@
 #-tl, --timelapse	: Timelapse mode. Takes a picture every <t>ms
 #sudo raspistill -n -e bmp -vf -hf -w 128 -h 128 -t 10800000 -tl 100 -o frames/frame%04d.bmp &
 #570 frames in 5 min 300 sec 1.9 sec / frame
-sudo raspistill -n -e bmp -vf -hf -w 128 -h 128 -t 1080000 -tl 1 -o frames/frame%04d.bmp &
-#541 frames in 5 min 300 sec 1.8 sec /frame
+sudo raspistill -n -e bmp -vf -hf -w 128 -h 128 -t 1020000 -tl 100 -o frames/frame%04d.bmp &
+#933 frames in 10 min 600 sec 1.5 sec /frame
 # mmal: Skipping frame 1 to restart at frame 389
 # mmal: Skipping frame 390 to restart at frame 1081
 # mmal: Skipping frame 1082 to restart at frame 1774
