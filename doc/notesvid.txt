@@ -1,0 +1,14 @@
+This is using the Rpi Zero with the camera  
+sudo apt-get install gpac
+devel@mypi3-8:~ $ sudo raspivid -vf -hf -w 256 -h 256  -t 30000 -o video.h264
+devel@mypi3-8:~ $ MP4Box -add video.h264 video.mp4
+AVC-H264 import - frame size 256 x 256 at 25.000 FPS
+AVC Import results: 897 samples - Slices: 15 I 882 P 0 B - 0 SEI - 15 IDR
+Saving video.mp4: 0.500 secs Interleaving
+
+devel@mypi3-8:~ $ ls -la video.h264 
+-rw-r--r-- 1 root root 351997 Aug 14 09:24 video.h264
+devel@mypi3-8:~ $ ls -la video.mp4
+-rw-r--r-- 1 devel devel 724028 Aug 14 09:24 video.mp4
+
+
