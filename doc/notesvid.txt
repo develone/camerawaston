@@ -10,5 +10,21 @@ devel@mypi3-8:~ $ ls -la video.h264
 -rw-r--r-- 1 root root 351997 Aug 14 09:24 video.h264
 devel@mypi3-8:~ $ ls -la video.mp4
 -rw-r--r-- 1 devel devel 724028 Aug 14 09:24 video.mp4
+ video.h264 thumb%04d.bmp -hide_banner
+Input #0, h264, from 'video.h264':
+  Duration: N/A, bitrate: N/A
+    Stream #0:0: Video: h264 (High), yuv420p(progressive), 256x256, 25 fps, 25 tbr, 1200k tbn, 50 tbc
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> bmp (native))
+Press [q] to stop, [?] for help
+[swscaler @ 0xd7dee0] No accelerated colorspace conversion found from yuv420p to bgr24.
+Output #0, image2, to 'thumb%04d.bmp':
+  Metadata:
+    encoder         : Lavf58.20.100
+    Stream #0:0: Video: bmp, bgr24, 256x256, q=2-31, 200 kb/s, 25 fps, 25 tbn, 25 tbc
+    Metadata:
+      encoder         : Lavc58.35.100 bmp
+frame=  897 fps= 30 q=-0.0 Lsize=N/A time=00:00:35.88 bitrate=N/A speed=1.22x    
+video:172271kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
 
 
