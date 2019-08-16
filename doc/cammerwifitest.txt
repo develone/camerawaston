@@ -1,0 +1,13 @@
+08/15/19
+pi@watson2:$ sudo raspivid -vf -hf -w 256 -h 256  -t 30000 -o video.h264
+pi@watson2:$ MP4Box -add video.h264 video.mp4
+pi@watson2:~/cameratest $ ffmpeg -i video.h264 thumb%04d.bmp -hide_banner
+pi@watson2:~/cameratest $ ls *.bmp | wc
+    897     897   12558
+
+testing push to github
+pi@watson2:~ $ cd camerawatson/
+pi@watson2:~/camerawatson $ git add doc/cammerwifitest.txt
+pi@watson2:~/camerawatson $ git config --global user.email "rwwatsondds@gmail.com"
+pi@watson2:~/camerawatson $ git config --global user.name "Robert Watson"
+pi@watson2:~/camerawatson $ git commit doc/cammerwifitest.txt
