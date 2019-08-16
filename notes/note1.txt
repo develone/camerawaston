@@ -1,0 +1,17 @@
+The time that nut is where the camera is about 20 frames
+This is out of 1799 frames on the test that I did with belt1.
+This took several steps.
+1. start the video on Rpi Zero with camera.
+https://github.com/develone/camerawatson/blob/master/belt1/h264/belt.h264
+2. convert the h264 to mp4 with MP4Box 
+3. split h264 to frames with ffmpeg
+4. Determine which frames have valid data
+https://github.com/develone/camerawatson/tree/master/belt1/nut/frame
+This has frame0064.bmp to frame0088.bmp
+5. run svd in octave on RaspBian stretch 
+https://github.com/develone/camerawatson/tree/master/belt1/ananut
+Did svd on 5 frames
+Need to work on the video file not the frames. 
+Let me know if you understand these steps.
+
+ 
