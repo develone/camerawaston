@@ -1,40 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-typedef struct
-{
-    unsigned char  Red;
-    unsigned char  Green;
-    unsigned char  Blue;
-
-} pixel;
-#pragma pack(2) /*2 byte packing */
-typedef struct
-{
-unsigned short int type;
-unsigned int size;
-unsigned short int reserved1,reserved2;
-unsigned int offset;
-
-
-}header;
-
-
-typedef struct
-{
-   unsigned int size;
-   int width,height;
-   unsigned short int bits;
-
-   unsigned int compression;
-   unsigned int pixelsize;
-   int xresolution,yresolution;
-   unsigned int ncolors;
-   unsigned int importantcolors;
-
-}headerInfo;
-
+#include "mycamera.h"
 
 int main(void) {
 	//int ky = [1,2,1; 0,0, 0; -1, -2 ,-1];
@@ -45,14 +12,11 @@ int main(void) {
 	char *g;
 	char *b;
 	char *cmd;
-	//char s[];
-	//          0123456789012345678901234567890123456789012345678901234567 
-	//char s2[70] = "raspistill -e bmp -vf -h 128 -w 128 -t 275 -o framethumb";
-	char s1[] = "date";
-	
-	char nd[8];
-	char *pe;
-	pe = &nd;
+ 	char date_cmd[] = "date";
+	char cam_cmd[60];
+	char frame_suf[8];
+	char *pframe_suf;
+	pframe_suf = &frame_suf;
 	int flag;
 	flag = 1;
 	int count;
@@ -65,19 +29,18 @@ int main(void) {
 	struct rec my_record; 
 	header head;
 	headerInfo headInfo;
-	
 		
-	
 	while (flag == 1) {
-		//          0123456789012345678901234567890123456789012345678901234567
-		char s[] = "raspistill -e bmp -vf -h 128 -w 128 -t 275 -o thumb";
-		sprintf(pe, "%04d.bmp",count);
-		strcat(s,pe);
-		printf("%s\n",s);
-		cmd = (char *)&s;
+		//                0123456789012345678901234567890123456789012345678901234567
+		char cam_pre[] = "raspistill -n -e bmp -vf -h 128 -w 128 -t 275 -o thumb";
+		sprintf(pframe_suf, "%04d.bmp",count);
+		strcat(cam_pre,pframe_suf);
+		 
+		printf("%s\n",cam_pre);
+		cmd = (char *)&cam_pre;
 		system(cmd);
 		char s3[] = "thumb";
-		strcat(s3,pe);
+		strcat(s3,pframe_suf);
 		printf("%s\n",s3);
 		inp = fopen(s3,"rb+");
 		if(inp==NULL)
@@ -95,21 +58,14 @@ int main(void) {
 		printf("bits %d ",headInfo.bits);
 		printf("%d ",headInfo.width);
 		printf("%d ",headInfo.height);
-
-		printf("\n");
-		
-		
-		
+		printf("\n");		
 		
  		for (i = 0; i < 128; i++) {
 			for (j = 0; j < 128; j++) {
 				fread(&my_record,sizeof(struct rec),1,inp);
-				r = (char *)my_record.raw_buf[0];
-			
-				g = (char *)my_record.raw_buf[1];
-				
-				b = (char *)my_record.raw_buf[2];
-				
+				r = (char *)my_record.raw_buf[0];			
+				g = (char *)my_record.raw_buf[1];				
+				b = (char *)my_record.raw_buf[2];				
 				printf("%d %d %d %d %d\n",i,j,r,g,b);
 				r++;
 				g++;
@@ -119,8 +75,7 @@ int main(void) {
 		
 		fclose(inp);
 		
- 
-		cmd = (char *)&s1;
+		cmd = (char *)&date_cmd;
 		system(cmd);		
 		count++;
 		if(count == 5) flag = 0;
