@@ -1,11 +1,13 @@
 clear
+w = 128;
+h = 128;
 
 kx= [1 ,0 ,-1; 2,0,-2; 1, 0 ,-1];
 ky= [1,2,1; 0,0, 0; -1, -2 ,-1];
 
 I = imread("thumb0058.bmp");
-for i = 1:256
-for j= 1:256
+for i = 1:w
+for j= 1:h
 im1(i,j) =I(i,j,1);
 endfor
 endfor
@@ -23,8 +25,8 @@ E = sqrt(H.*H + V.*V); % or sqrt(H.^2+V.^2)
 figure
 imshow(E, []) 
 
-for i = 1:256
-for j= 1:256
+for i = 1:w
+for j= 1:h
 im2(i,j) =I(i,j,2);
 endfor
 endfor
@@ -43,8 +45,8 @@ figure
 imshow(E, []) 
 
 
-for i = 1:256
-for j= 1:256
+for i = 1:w
+for j= 1:h
 im3(i,j) =I(i,j,3);
 endfor
 endfor
