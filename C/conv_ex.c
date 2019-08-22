@@ -50,6 +50,7 @@ main()
                         {
 
                                     y[i]=y[i]+(x[j]*h[i-j]);
+                                    printf("%d %d %d %d %d %d\n",i,j,i-j,y[i],x[j],h[i-j]);
 
                         }
 
