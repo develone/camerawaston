@@ -5,12 +5,58 @@
 #define dbg 1
 #define dbg1 1
 #define dbg2 0
+int x[128],h[128],y[128];
+int conv(int *xx,int *hh,int *yy, int ii,int jj, int mm,int nn) {
+            // padding of zeors
+
+            for(ii=mm;ii<=mm+nn-1;ii++)
+
+                        xx[ii]=0;
+
+            for(ii=nn;ii<=mm+nn-1;ii++)
+
+                        hh[ii]=0;
+
+
+
+            /* convolution operation */
+
+            for(ii=0;ii<mm+nn-1;ii++)
+
+            {          
+
+                        yy[ii]=0;
+
+                        for(jj=0;jj<=ii;jj++)
+
+                        {
+
+                                    yy[ii]=yy[ii]+(xx[jj]*hh[ii-jj]);
+                                    printf("ii=%d jj=%d ii-jj=%d yy=%d xx=%d hh=%d\n",ii,jj,ii-jj,yy[ii],xx[jj],hh[ii-jj]);
+
+                        }
+
+            }
+
+
+
+            //displaying the o/p
+			/*
+            for(ii=0;ii<mm+nn-1;ii++)
+
+                        printf("\n The Value of output yy=[%d]=%d",ii,yy[ii]);
+                        */
+            return 0;
+
+}
+
 int main(void) {
 	/*
 	 * ky & kx are need to be convolution with the image
 	 * to compute the SobelFilter.
 	*/
 	double ky[3][3] = { {1.0,2.0,1.0}, {0.0,0.0,0.0},{-1.0,-2.0,-1.0} };
+	 
 	double kx[3][3] = { {1.0 ,0.0 ,-1.0}, {2.0,0.0,-2.0}, {1.0, 0.0 ,-1.0} };
 	double *pky;
 	double *pkx;
@@ -30,6 +76,12 @@ int main(void) {
 	double *phor;
 	double *pver;
 	char *ptest;
+	int row, col;
+	int *phh;
+	int *pxx;
+	int *pyy;
+	int c;
+	int hh[2];
 	if(dbg1==1) {
 		char a[2];
 		a[0]=100;
@@ -137,25 +189,39 @@ int main(void) {
 		pr = pr - headInfo.width*headInfo.height;
 		pg = pg - headInfo.width*headInfo.height;
 		pb = pb - headInfo.width*headInfo.height;
-		if(dbg== 1) {
+		if(dbg == 1) {
 			for (i = 0; i <headInfo.width ; i++) {
 				for (j = 0; j < headInfo.height; j++) {
 					printf("%d %d %d %d %d\n",i,j,pr[i,j],pg[i,j],pb[i,j]);
 				}
 			}
 		}
-		if (dbg2 == 1) {
-			for(i=0;i<headInfo.width+3-1;i++) {
-				*phor = 0;
-				for(j=0;j<=i;j++) {
-					*phor = *phor +(double)pr[0,j] * ky[0][i-j];
-					printf("i=%d j=%d %5.1f \n",i,j,*phor);
-					phor++;
-				}	
-			}	
- 
+		fclose(inp);		
+		if(dbg2 == 1) {
+			hh[0] = 1;
+			hh[1] = 0;
+			hh[2] = 1;
+			phh = &hh[0];
+			pxx = &x[0];
+			pyy = &y[0];
+			for(i=0;i<headInfo.width-4;i++) {
+				x[i] = (int)pr[0,i];
+				//pxx++;
+				printf("%d \n",x[i]);
+				//for(j=0;j<headInfo.height;j++) {
+				//}
+			}
+			//printf("\n");
+			//pxx = pxx - headInfo.width; 
+			m = 128;
+			n = 3;
+			i = 0;
+			j = 0;
+			c = conv(pxx,phh,pyy,i,j,m,n);
+			
 		}
-		fclose(inp);
+		 
+
 		free(pr);
 		free(pg);
 		free(pb);
@@ -165,7 +231,7 @@ int main(void) {
 		cmd = (char *)&date_cmd;
 		system(cmd);		
 		count++;
-		if(count == 1) flag = 0;
+		if(count == 5) flag = 0;
 	}
 
 	return 0;
