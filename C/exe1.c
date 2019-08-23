@@ -4,7 +4,7 @@
 #include "mycamera.h"
 #define dbg 1
 #define dbg1 1
-#define dbg2 0
+#define dbg2 1
 int x[128],h[128],y[128];
 int conv(int *xx,int *hh,int *yy, int ii,int jj, int mm,int nn) {
             // padding of zeors
@@ -41,11 +41,11 @@ int conv(int *xx,int *hh,int *yy, int ii,int jj, int mm,int nn) {
 
 
             //displaying the o/p
-			/*
+			
             for(ii=0;ii<mm+nn-1;ii++)
 
                         printf("\n The Value of output yy=[%d]=%d",ii,yy[ii]);
-                        */
+                        
             return 0;
 
 }
@@ -135,16 +135,21 @@ int main(void) {
 	}	
 	while (flag == 1) {
 		//                0123456789012345678901234567890123456789012345678901234567
-		char cam_pre[] = "raspistill  -e bmp  -h 128 -w 128 -t 275 -o thumb";
+		char cam_pre[] = "sudo raspistill  -e bmp  -h 128 -w 128 -t 275 -o thumb";
+		char s3[] = "thumb";
+		printf("%s %d\n",cam_pre,sizeof(cam_pre));
 		sprintf(pframe_suf, "%04d.bmp",count);
+		
 		strcat(cam_pre,pframe_suf);
+		printf("%s %d\n",cam_pre,sizeof(cam_pre));
 		if(dbg == 1) printf("%s\n",cam_pre);
 		cmd = (char *)&cam_pre;
 		system(cmd);
-		char s3[] = "thumb";
-		strcat(s3,pframe_suf);
+		char s4[] = "thumb";
+		strcat(s4,pframe_suf);
+		printf("%s %d \n",s4,sizeof(s4));
 		if(dbg == 1) printf("%s\n",s3);
-		inp = fopen(s3,"rb+");
+		inp = fopen(s4,"rb+");
 		if(inp==NULL)
 		{
 			printf("Error opening first file");
