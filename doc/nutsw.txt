@@ -1,0 +1,22 @@
++5	orange	2	1	red	+3.3
+		4	3
+grd	black	6	5
+		8	7
+		10	9
+		12	11
+		14	13
+		16	15
+ir-sw	blue	18	17
+		20	19
+		22	21
+		24	23
+
+	            orange
+		    |
+	            | red
+                    | |
+		o o o o o
+		 o o o o
+		 |     |
+                 |     blue
+	         black
