@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <string.h>
 #include "mycamera.h"
+#include <wiringPi.h>
 #define dbg 1
 #define dbg1 1
 #define dbg2 1
+#  define PIN_SW 5 //BCM24 	PIN 18, GPIO.5, IOB_79	T9
 int x[128],h[128],y[128];
 int conv(int *xx,int *hh,int *yy, int ii,int jj, int mm,int nn) {
             // padding of zeors
@@ -82,6 +84,15 @@ int main(void) {
 	int *pyy;
 	int c;
 	int hh[2];
+	int flag = 1;
+	int flag1 = 1;
+	char	ir_sw = 0;
+	
+	
+	wiringPiSetup();
+	
+	pinMode(PIN_SW, INPUT);
+
 	if(dbg1==1) {
 		char a[2];
 		a[0]=100;
@@ -101,7 +112,7 @@ int main(void) {
 	char frame_suf[8];
 	char *pframe_suf;
 	pframe_suf = &frame_suf[0];
-	int flag;
+	
 	flag = 1;
 	int count;
 	count = 0;
@@ -143,8 +154,21 @@ int main(void) {
 		strcat(cam_pre,pframe_suf);
 		printf("%s %d\n",cam_pre,sizeof(cam_pre));
 		if(dbg == 1) printf("%s\n",cam_pre);
-		cmd = (char *)&cam_pre;
-		system(cmd);
+		while (flag1) {
+			if (digitalRead(PIN_SW)) {
+				ir_sw |= 0x1;
+				printf("ir_sw= 0x%x no nut\n",ir_sw);
+				printf("\n");
+			}	
+			else {
+				ir_sw = 0x0;
+				printf("ir_sw= 0x%x nut coming\n",ir_sw);
+		
+				cmd = (char *)&cam_pre;
+				system(cmd);
+				break;
+		}
+	}
 		char s4[] = "thumb";
 		strcat(s4,pframe_suf);
 		printf("%s %d \n",s4,sizeof(s4));
@@ -236,7 +260,7 @@ int main(void) {
 		cmd = (char *)&date_cmd;
 		system(cmd);		
 		count++;
-		if(count == 5) flag = 0;
+		//if(count == 5) flag = 0;
 	}
 
 	return 0;
