@@ -166,14 +166,14 @@ int main(void) {
 		
 				cmd = (char *)&cam_pre;
 				system(cmd);
-				break;
+				flag1 = 0;
 		}
 	}
 		char s4[] = "thumb";
 		strcat(s4,pframe_suf);
 		printf("%s %d \n",s4,sizeof(s4));
-		if(dbg == 1) printf("%s\n",s3);
-		inp = fopen(s4,"rb+");
+		//if(dbg == 1) printf("%s\n",s3);
+		inp = fopen("thumb0000.bmp","rb+");
 		if(inp==NULL)
 		{
 			printf("Error opening first file");
@@ -225,7 +225,7 @@ int main(void) {
 				}
 			}
 		}
-		fclose(inp);		
+				
 		if(dbg2 == 1) {
 			hh[0] = 1;
 			hh[1] = 0;
@@ -246,11 +246,11 @@ int main(void) {
 			n = 3;
 			i = 0;
 			j = 0;
-			c = conv(pxx,phh,pyy,i,j,m,n);
+			//c = conv(pxx,phh,pyy,i,j,m,n);
 			
 		}
 		 
-
+		fclose(inp);
 		free(pr);
 		free(pg);
 		free(pb);
@@ -258,8 +258,9 @@ int main(void) {
 		free(pver);
 		free(psum);
 		cmd = (char *)&date_cmd;
-		system(cmd);		
-		count++;
+		system(cmd);
+		flag1 = 1;		
+		//count++;
 		//if(count == 5) flag = 0;
 	}
 
