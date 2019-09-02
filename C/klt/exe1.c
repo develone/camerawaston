@@ -9,7 +9,7 @@
 
 #define dbg 1
 #define dbg1 1
-#define dbg2 1
+#define dbg2 0
 #  define PIN_SW 5 //BCM24 	PIN 18, GPIO.5, IOB_79	T9
 int x[128],h[128],y[128];
 int conv(int *xx,int *hh,int *yy, int ii,int jj, int mm,int nn) {
@@ -79,6 +79,7 @@ int main(void) {
 	char *pr;
 	char *pg;
 	char *pb;
+	char *prwr;
 	double *phor;
 	double *pver;
 	char *ptest;
@@ -198,6 +199,7 @@ int main(void) {
 		}
 		//allocate memory to store the r g b pixel
 		pr = (char *)malloc(headInfo.width*headInfo.height);
+		prwr = (char *)malloc(50*50);
 		pg = (char *)malloc(headInfo.width*headInfo.height);
 		pb = (char *)malloc( headInfo.width*headInfo.height);
 		phor = (double *)malloc( headInfo.width*headInfo.height);
@@ -222,10 +224,23 @@ int main(void) {
 		}
 		//befor free the memory need to restore the pointers
 		pr = pr - headInfo.width*headInfo.height;
+		pr = pr + 2492; //19 lines dn + 60
+		for (j = 20; j <70;j++) {
+			for (i = 60; i <110 ; i++) {
+				*prwr = *pr;
+				pr++;
+				prwr++;
+			}
+			pr = pr + 18;//110 -128 end of row
+			pr = pr + 60;
+		}
+		pr = pr - 2492 - ((50*50)+(78*50));
+		prwr = prwr - (50*50);
 		pg = pg - headInfo.width*headInfo.height;
 		pb = pb - headInfo.width*headInfo.height;
 		
-		pgmWriteFile("thumb0000.pgm",pr,headInfo.width,headInfo.height);
+		pgmWriteFile("thumb0000.pgm",prwr,50,50);
+		//pgmWriteFile("thumb0000.pgm",pr,headInfo.width,headInfo.height);
 		if(dbg == 1) {
 			for (i = 0; i <headInfo.width ; i++) {
 				for (j = 0; j < headInfo.height; j++) {
@@ -259,6 +274,7 @@ int main(void) {
 		}
 		 
 		fclose(inp);
+		free(prwr);
 		free(pr);
 		free(pg);
 		free(pb);
