@@ -25,7 +25,7 @@ CFLAGS = $(FLAG1) $(FLAG2)
 # There should be no need to modify anything below this line (but
 # feel free to if you want).
 
-EXAMPLES = example1.c 
+EXAMPLES = example1.c exe1.c
 ARCH = convolve.c error.c pnmio.c pyramid.c selectGoodFeatures.c \
        storeFeatures.c trackFeatures.c klt.c klt_util.c writeFeatures.c
 LIB = -L/usr/local/lib -L/usr/lib
@@ -45,8 +45,8 @@ lib: $(ARCH:.c=.o)
 example1: libklt.a
 	$(CC) -O3 $(CFLAGS) -o $@ $@.c -L. -lklt $(LIB) -lm
 
-example2: libklt.a
-	$(CC) -O3 $(CFLAGS) -o $@ $@.c -L. -lklt $(LIB) -lm
+exe1: libklt.a
+	$(CC) -O3 $(CFLAGS) -o $@ $@.c -L. -lklt -lwiringPi $(LIB) -lm
 
 example3: libklt.a
 	$(CC) -O3 $(CFLAGS) -o $@ $@.c -L. -lklt $(LIB) -lm
@@ -61,7 +61,7 @@ depend:
 	makedepend $(ARCH) $(EXAMPLES)
 
 clean:
-	rm -f *.o *.a $(EXAMPLES:.c=) *.tar *.tar.gz libklt.a
+	rm -f *.o *.a exe1 $(EXAMPLES:.c=) *.tar *.tar.gz libklt.a
 
 
 
