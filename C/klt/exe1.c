@@ -93,6 +93,12 @@ int main(void) {
 	int flag1 = 1;
 	char	ir_sw = 0;
 	
+	//klt variables from example1.c
+	unsigned char *img1;
+	KLT_TrackingContext tc;
+	KLT_FeatureList fl;
+	int nFeatures = 100;
+	int ncols, nrows;
 	
 	wiringPiSetup();
 	
@@ -151,7 +157,7 @@ int main(void) {
 	}	
 	while (flag == 1) {
 		//                0123456789012345678901234567890123456789012345678901234567
-		char cam_pre[] = "sudo raspistill  -e bmp -vf -h 128 -w 128 -t 275 -o thumb";
+		char cam_pre[] = "sudo raspistill  -e bmp -vf -h 128 -w 128 -t 300 -o thumb";
 		char s3[] = "thumb";
 		printf("%s %d\n",cam_pre,sizeof(cam_pre));
 		sprintf(pframe_suf, "%04d.bmp",count);
@@ -238,7 +244,26 @@ int main(void) {
 		prwr = prwr - (50*50);
 		pg = pg - headInfo.width*headInfo.height;
 		pb = pb - headInfo.width*headInfo.height;
+		ncols = 50;
+		nrows = 50;
 		
+		tc = KLTCreateTrackingContext();
+		KLTPrintTrackingContext(tc);
+		fl = KLTCreateFeatureList(nFeatures);
+
+		img1 = prwr;
+		
+		KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl);
+		printf("\nIn first image:\n");
+		for (i = 0 ; i < fl->nFeatures ; i++)  {
+			printf("Feature #%d:  (%f,%f) with value of %d\n",
+			i, fl->feature[i]->x, fl->feature[i]->y,
+			fl->feature[i]->val);
+		}
+
+		KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "feat1.ppm");
+		KLTWriteFeatureList(fl, "feat1.txt", "%3d");
+
 		pgmWriteFile("thumb0000.pgm",prwr,50,50);
 		//pgmWriteFile("thumb0000.pgm",pr,headInfo.width,headInfo.height);
 		if(dbg == 1) {
