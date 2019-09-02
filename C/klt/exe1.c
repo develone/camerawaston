@@ -3,6 +3,10 @@
 #include <string.h>
 #include "mycamera.h"
 #include <wiringPi.h>
+
+#include "pnmio.h"
+#include "klt.h"
+
 #define dbg 1
 #define dbg1 1
 #define dbg2 1
@@ -202,8 +206,10 @@ int main(void) {
 		//printf("%d\n",sizeof(char *));
 		printf("%d\n",headInfo.width*headInfo.height);
 		printf("pr= 0x%x pg= 0x%x pb= 0x%x \n",pr,pg,pb);
- 		for (i = 0; i <headInfo.width ; i++) {
-			for (j = 0; j < headInfo.height; j++) {
+		//now reading the img 1 row of 129 cols
+		for (j = 0; j < headInfo.height; j++) {
+			for (i = 0; i <headInfo.width ; i++) {
+			
 				fread(&my_record,sizeof(struct rec),1,inp);
 				*pr = my_record.raw_buf[0];			
 				*pg = my_record.raw_buf[1];				
@@ -218,6 +224,8 @@ int main(void) {
 		pr = pr - headInfo.width*headInfo.height;
 		pg = pg - headInfo.width*headInfo.height;
 		pb = pb - headInfo.width*headInfo.height;
+		
+		pgmWriteFile("thumb0000.pgm",pr,headInfo.width,headInfo.height);
 		if(dbg == 1) {
 			for (i = 0; i <headInfo.width ; i++) {
 				for (j = 0; j < headInfo.height; j++) {
