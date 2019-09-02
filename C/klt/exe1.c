@@ -150,7 +150,7 @@ int main(void) {
 	}	
 	while (flag == 1) {
 		//                0123456789012345678901234567890123456789012345678901234567
-		char cam_pre[] = "sudo raspistill  -e bmp  -h 128 -w 128 -t 275 -o thumb";
+		char cam_pre[] = "sudo raspistill  -e bmp -vf -h 128 -w 128 -t 275 -o thumb";
 		char s3[] = "thumb";
 		printf("%s %d\n",cam_pre,sizeof(cam_pre));
 		sprintf(pframe_suf, "%04d.bmp",count);
