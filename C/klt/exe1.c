@@ -11,64 +11,12 @@
 #define dbg1 1
 #define dbg2 0
 #  define PIN_SW 5 //BCM24 	PIN 18, GPIO.5, IOB_79	T9
-int x[128],h[128],y[128];
-int conv(int *xx,int *hh,int *yy, int ii,int jj, int mm,int nn) {
-            // padding of zeors
 
-            for(ii=mm;ii<=mm+nn-1;ii++)
-
-                        xx[ii]=0;
-
-            for(ii=nn;ii<=mm+nn-1;ii++)
-
-                        hh[ii]=0;
-
-
-
-            /* convolution operation */
-
-            for(ii=0;ii<mm+nn-1;ii++)
-
-            {          
-
-                        yy[ii]=0;
-
-                        for(jj=0;jj<=ii;jj++)
-
-                        {
-
-                                    yy[ii]=yy[ii]+(xx[jj]*hh[ii-jj]);
-                                    printf("ii=%d jj=%d ii-jj=%d yy=%d xx=%d hh=%d\n",ii,jj,ii-jj,yy[ii],xx[jj],hh[ii-jj]);
-
-                        }
-
-            }
-
-
-
-            //displaying the o/p
-			
-            for(ii=0;ii<mm+nn-1;ii++)
-
-                        printf("\n The Value of output yy=[%d]=%d",ii,yy[ii]);
-                        
-            return 0;
-
-}
 
 int main(void) {
-	/*
-	 * ky & kx are need to be convolution with the image
-	 * to compute the SobelFilter.
-	*/
-	double ky[3][3] = { {1.0,2.0,1.0}, {0.0,0.0,0.0},{-1.0,-2.0,-1.0} };
+	
 	 
-	double kx[3][3] = { {1.0 ,0.0 ,-1.0}, {2.0,0.0,-2.0}, {1.0, 0.0 ,-1.0} };
-	double *pky;
-	double *pkx;
-	double *psum;
-	pky = &ky[0][0];
-	pkx = &kx[0][0];
+ 
 	char h[3];
 	int i,j,m,n;
 	//for(i=n;i<=m+n-1;i++) {
@@ -80,8 +28,7 @@ int main(void) {
 	char *pg;
 	char *pb;
 	char *prwr;
-	double *phor;
-	double *pver;
+ 
 	char *ptest;
 	int row, col;
 	int *phh;
@@ -135,26 +82,7 @@ int main(void) {
 	struct rec my_record; 
 	header head;
 	headerInfo headInfo;
-	if(dbg1 == 1) {
-		printf("ky=%d kx=%d \n", sizeof(ky),sizeof(kx));
-		printf("ky=0x%0x kx=0x%x \n",&ky[0][0],&kx[0][0]);
-		for (i = 0; i <3;i++) {
-			for (j = 0; j < 3; j++) {
-				printf("%d %d ky=%5.1f\n",i,j,*pky);
-				pky++;
-				//printf("%d %d %5.1f\n",i,j,ky[i][j]);
-			}
-		}
-		pky = pky - 9;
-		for (i = 0; i <3;i++) {
-			for (j = 0; j < 3; j++) {
-				printf("%d %d kx=%5.1f\n",i,j,*pkx);
-				pkx++;				
-				//printf("%d %d %5.1f \n",i,j,kx[i][j]);
-			}
-		}
-		pkx = pkx - 9;
-	}	
+		
 	while (flag == 1) {
 		//                0123456789012345678901234567890123456789012345678901234567
 		char cam_pre[] = "sudo raspistill  -e bmp -vf -h 128 -w 128 -t 300 -o thumb";
@@ -208,9 +136,7 @@ int main(void) {
 		prwr = (char *)malloc(50*50);
 		pg = (char *)malloc(headInfo.width*headInfo.height);
 		pb = (char *)malloc( headInfo.width*headInfo.height);
-		phor = (double *)malloc( headInfo.width*headInfo.height);
-		pver = (double *)malloc( headInfo.width*headInfo.height);
-		psum = (double *)malloc( headInfo.width*headInfo.height);
+		
 		//printf("%d\n",sizeof(char *));
 		printf("%d\n",headInfo.width*headInfo.height);
 		printf("pr= 0x%x pg= 0x%x pb= 0x%x \n",pr,pg,pb);
@@ -274,38 +200,14 @@ int main(void) {
 			}
 		}
 				
-		if(dbg2 == 1) {
-			hh[0] = 1;
-			hh[1] = 0;
-			hh[2] = 1;
-			phh = &hh[0];
-			pxx = &x[0];
-			pyy = &y[0];
-			for(i=0;i<headInfo.width-4;i++) {
-				x[i] = (int)pr[0,i];
-				//pxx++;
-				printf("%d \n",x[i]);
-				//for(j=0;j<headInfo.height;j++) {
-				//}
-			}
-			//printf("\n");
-			//pxx = pxx - headInfo.width; 
-			m = 128;
-			n = 3;
-			i = 0;
-			j = 0;
-			//c = conv(pxx,phh,pyy,i,j,m,n);
-			
-		}
+		
 		 
 		fclose(inp);
 		free(prwr);
 		free(pr);
 		free(pg);
 		free(pb);
-		free(phor);
-		free(pver);
-		free(psum);
+
 		cmd = (char *)&date_cmd;
 		system(cmd);
 		flag1 = 1;		
