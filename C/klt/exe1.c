@@ -7,7 +7,7 @@
 #include "pnmio.h"
 #include "klt.h"
 
-#define dbg 1
+#define dbg 0
 #define dbg1 1
 #define dbg2 0
 #  define PIN_SW 5 //BCM24 	PIN 18, GPIO.5, IOB_79	T9
@@ -44,7 +44,7 @@ int main(void) {
 	unsigned char *img1;
 	KLT_TrackingContext tc;
 	KLT_FeatureList fl;
-	int nFeatures = 100;
+	int nFeatures = 10;
 	int ncols, nrows;
 	
 	wiringPiSetup();
@@ -96,8 +96,8 @@ int main(void) {
 		while (flag1) {
 			if (digitalRead(PIN_SW)) {
 				ir_sw |= 0x1;
-				printf("ir_sw= 0x%x no nut\n",ir_sw);
-				printf("\n");
+				//printf("ir_sw= 0x%x no nut\n",ir_sw);
+				//printf("\n");
 			}	
 			else {
 				ir_sw = 0x0;
