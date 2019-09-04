@@ -85,7 +85,7 @@ int main(void) {
 		
 	while (flag == 1) {
 		//                0123456789012345678901234567890123456789012345678901234567
-		char cam_pre[] = "sudo raspistill  -e bmp -vf -h 128 -w 128 -t 300 -o thumb";
+		char cam_pre[] = "sudo raspistill  -e bmp -vf -h 128 -w 128 -t 275 -o thumb";
 		char s3[] = "thumb";
 		printf("%s %d\n",cam_pre,sizeof(cam_pre));
 		sprintf(pframe_suf, "%04d.bmp",count);
@@ -156,17 +156,17 @@ int main(void) {
 		}
 		//befor free the memory need to restore the pointers
 		pr = pr - headInfo.width*headInfo.height;
-		pr = pr + 2492; //19 lines dn + 60
+		pr = pr + 2462; //19 lines dn + 60
 		for (j = 20; j <70;j++) {
-			for (i = 60; i <110 ; i++) {
+			for (i = 30; i <80 ; i++) {
 				*prwr = *pr;
 				pr++;
 				prwr++;
 			}
-			pr = pr + 18;//110 -128 end of row
-			pr = pr + 60;
+			pr = pr + 48;//110 -128 end of row
+			pr = pr + 30;
 		}
-		pr = pr - 2492 - ((50*50)+(78*50));
+		pr = pr - 2462 - ((50*50)+(78*50));
 		prwr = prwr - (50*50);
 		pg = pg - headInfo.width*headInfo.height;
 		pb = pb - headInfo.width*headInfo.height;
