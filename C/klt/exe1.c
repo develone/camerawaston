@@ -46,7 +46,7 @@ int main(void) {
 	KLT_FeatureList fl;
 	int nFeatures = 10;
 	int ncols, nrows;
-	
+	int rowsdn,rows,offset,endofline;
 	wiringPiSetup();
 	
 	pinMode(PIN_SW, INPUT);
@@ -156,17 +156,23 @@ int main(void) {
 		}
 		//befor free the memory need to restore the pointers
 		pr = pr - headInfo.width*headInfo.height;
-		pr = pr + 2462; //19 lines dn + 60
-		for (j = 20; j <70;j++) {
-			for (i = 30; i <80 ; i++) {
+		offset = 30;
+		endofline = headInfo.width - offset - ncols;
+		ncols = 50;//number of cols to be extracted
+		nrows = 50;//number of rows to be extracted
+		rows = 19;
+		rowsdn = (headInfo.width * rows) + offset;
+		pr = pr + rowsdn; //rows + 1 lines dn + offset
+		for (j = (rows+1); j <(rows+1+nrows);j++) {
+			for (i = offset; i <ncols+offset ; i++) {
 				*prwr = *pr;
 				pr++;
 				prwr++;
 			}
-			pr = pr + 48;//110 -128 end of row
-			pr = pr + 30;
+			pr = pr + endofline;//headInfo.width - offset - ncols
+			pr = pr + offset;
 		}
-		pr = pr - 2462 - ((50*50)+(78*50));
+		pr = pr - rowsdn - ((50*50)+(78*50));
 		prwr = prwr - (50*50);
 		pg = pg - headInfo.width*headInfo.height;
 		pb = pb - headInfo.width*headInfo.height;
