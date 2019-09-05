@@ -160,7 +160,7 @@ int main(void) {
 		endofline = headInfo.width - offset - ncols;
 		ncols = 50;//number of cols to be extracted
 		nrows = 50;//number of rows to be extracted
-		rows = 19;
+		rows = 17;
 		rowsdn = (headInfo.width * rows) + offset;
 		pr = pr + rowsdn; //rows + 1 lines dn + offset
 		for (j = (rows+1); j <(rows+1+nrows);j++) {
