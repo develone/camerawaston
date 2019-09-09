@@ -133,7 +133,9 @@ int main(void) {
 		}
 		//allocate memory to store the r g b pixel
 		pr = (char *)malloc(headInfo.width*headInfo.height);
-		prwr = (char *)malloc(50*50);
+		ncols = 80;//number of cols to be extracted
+		nrows = 50;//number of rows to be extracted
+		prwr = (char *)malloc(ncols*nrows);
 		pg = (char *)malloc(headInfo.width*headInfo.height);
 		pb = (char *)malloc( headInfo.width*headInfo.height);
 		
@@ -154,17 +156,21 @@ int main(void) {
 				pb++;
 			}
 		}
+		printf("pr= 0x%x pg= 0x%x pb= 0x%x \n",pr,pg,pb);
 		//befor free the memory need to restore the pointers
 		pr = pr - headInfo.width*headInfo.height;
+		printf("pr= 0x%x pg= 0x%x pb= 0x%x \n",pr,pg,pb);
 		offset = 30;
 		endofline = headInfo.width - offset - ncols;
-		ncols = 50;//number of cols to be extracted
-		nrows = 50;//number of rows to be extracted
-		rows = 14;
+
+		rows = 18;
 		rowsdn = (headInfo.width * rows) + offset;
+		printf("pr= 0x%x pg= 0x%x pb= 0x%x prwr=0x%x \n",pr,pg,pb,prwr);
 		pr = pr + rowsdn; //rows + 1 lines dn + offset
-		for (j = (rows+1); j <(rows+1+nrows);j++) {
-			for (i = offset; i <ncols+offset ; i++) {
+		
+		printf("pr= 0x%x pg= 0x%x pb= 0x%x prwr=0x%x \n",pr,pg,pb,prwr);
+		for (j = 0; j < nrows;j++) {
+			for (i = 0; i < ncols ; i++) {
 				*prwr = *pr;
 				pr++;
 				prwr++;
@@ -172,12 +178,13 @@ int main(void) {
 			pr = pr + endofline;//headInfo.width - offset - ncols
 			pr = pr + offset;
 		}
-		pr = pr - rowsdn - ((50*50)+(78*50));
-		prwr = prwr - (50*50);
+		printf("pr= 0x%x pg= 0x%x pb= 0x%x prwr=0x%x \n",pr,pg,pb,prwr);
+		pr = pr - rowsdn - ((ncols*nrows)+(endofline*nrows)+(offset*nrows));
+		prwr = prwr - (ncols*nrows);
+		printf("%d %d %d %d %d %d \n",pr,rowsdn,(ncols*nrows),(endofline*nrows),prwr,(offset*nrows));
 		pg = pg - headInfo.width*headInfo.height;
 		pb = pb - headInfo.width*headInfo.height;
-		ncols = 50;
-		nrows = 50;
+		printf("pr= 0x%x pg= 0x%x pb= 0x%x prwr=0x%x \n",pr,pg,pb,prwr);
 		
 		tc = KLTCreateTrackingContext();
 		KLTPrintTrackingContext(tc);
@@ -196,7 +203,7 @@ int main(void) {
 		KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "feat1.ppm");
 		KLTWriteFeatureList(fl, "feat1.txt", "%3d");
 
-		pgmWriteFile("thumb0000.pgm",prwr,50,50);
+		pgmWriteFile("thumb0000.pgm",prwr,ncols,nrows);
 		//pgmWriteFile("thumb0000.pgm",pr,headInfo.width,headInfo.height);
 		if(dbg == 1) {
 			for (i = 0; i <headInfo.width ; i++) {
