@@ -28,7 +28,10 @@ int main(void) {
 	char *pg;
 	char *pb;
 	char *prwr;
- 
+ 	char *pgwr;
+ 	char *pbwr;
+
+
 	char *ptest;
 	int row, col;
 	int *phh;
@@ -41,9 +44,9 @@ int main(void) {
 	char	ir_sw = 0;
 	
 	//klt variables from example1.c
-	unsigned char *img1;
-	KLT_TrackingContext tc;
-	KLT_FeatureList fl;
+	unsigned char *img1,*img2,*img3;
+	KLT_TrackingContext tc1,tc2,tc3;
+	KLT_FeatureList fl1,fl2,fl3;
 	int nFeatures = 10;
 	int ncols, nrows;
 	int rowsdn,rows,offset,endofline;
@@ -136,6 +139,8 @@ int main(void) {
 		ncols = 80;//number of cols to be extracted
 		nrows = 50;//number of rows to be extracted
 		prwr = (char *)malloc(ncols*nrows);
+		pgwr = (char *)malloc(ncols*nrows);
+		pbwr = (char *)malloc(ncols*nrows);
 		pg = (char *)malloc(headInfo.width*headInfo.height);
 		pb = (char *)malloc( headInfo.width*headInfo.height);
 		
@@ -159,6 +164,8 @@ int main(void) {
 		printf("pr= 0x%x pg= 0x%x pb= 0x%x \n",pr,pg,pb);
 		//befor free the memory need to restore the pointers
 		pr = pr - headInfo.width*headInfo.height;
+		pg = pg - headInfo.width*headInfo.height;
+		pb = pb - headInfo.width*headInfo.height;
 		printf("pr= 0x%x pg= 0x%x pb= 0x%x \n",pr,pg,pb);
 		offset = 30;
 		endofline = headInfo.width - offset - ncols;
@@ -167,43 +174,79 @@ int main(void) {
 		rowsdn = (headInfo.width * rows) + offset;
 		printf("pr= 0x%x pg= 0x%x pb= 0x%x prwr=0x%x \n",pr,pg,pb,prwr);
 		pr = pr + rowsdn; //rows + 1 lines dn + offset
-		
+		pg = pg + rowsdn; //rows + 1 lines dn + offset
+		pb = pb + rowsdn; //rows + 1 lines dn + offset
 		printf("pr= 0x%x pg= 0x%x pb= 0x%x prwr=0x%x \n",pr,pg,pb,prwr);
 		for (j = 0; j < nrows;j++) {
 			for (i = 0; i < ncols ; i++) {
 				*prwr = *pr;
 				pr++;
 				prwr++;
+				*pgwr = *pg;
+				pg++;
+				pgwr++;	
+				*pbwr = *pb;
+				pb++;
+				pbwr++;			
 			}
 			pr = pr + endofline;//headInfo.width - offset - ncols
 			pr = pr + offset;
+			pg = pg + endofline;//headInfo.width - offset - ncols
+			pg = pg + offset;
+			pb = pb + endofline;//headInfo.width - offset - ncols
+			pb = pb + offset;
 		}
 		printf("pr= 0x%x pg= 0x%x pb= 0x%x prwr=0x%x \n",pr,pg,pb,prwr);
 		pr = pr - rowsdn - ((ncols*nrows)+(endofline*nrows)+(offset*nrows));
 		prwr = prwr - (ncols*nrows);
+		pg = pg - rowsdn - ((ncols*nrows)+(endofline*nrows)+(offset*nrows));
+		pgwr = pgwr - (ncols*nrows);
+		pb = pb - rowsdn - ((ncols*nrows)+(endofline*nrows)+(offset*nrows));
+		pbwr = pbwr - (ncols*nrows);
 		printf("%d %d %d %d %d %d \n",pr,rowsdn,(ncols*nrows),(endofline*nrows),prwr,(offset*nrows));
-		pg = pg - headInfo.width*headInfo.height;
-		pb = pb - headInfo.width*headInfo.height;
+		//pg = pg - headInfo.width*headInfo.height;
+		//pb = pb - headInfo.width*headInfo.height;
 		printf("pr= 0x%x pg= 0x%x pb= 0x%x prwr=0x%x \n",pr,pg,pb,prwr);
 		
-		tc = KLTCreateTrackingContext();
-		KLTPrintTrackingContext(tc);
-		fl = KLTCreateFeatureList(nFeatures);
-
-		img1 = prwr;
+		tc1 = KLTCreateTrackingContext();
+		KLTPrintTrackingContext(tc1);
+		fl1 = KLTCreateFeatureList(nFeatures);
+		tc2 = KLTCreateTrackingContext();
+		KLTPrintTrackingContext(tc2);
+		fl2 = KLTCreateFeatureList(nFeatures);
+		tc3 = KLTCreateTrackingContext();
+		KLTPrintTrackingContext(tc3);
+		fl3 = KLTCreateFeatureList(nFeatures);
 		
-		KLTSelectGoodFeatures(tc, img1, ncols, nrows, fl);
+		img1 = prwr;
+		img2 = pgwr;
+		img3 = pbwr;
+		
+		KLTSelectGoodFeatures(tc1, img1, ncols, nrows, fl1);
+		KLTSelectGoodFeatures(tc2, img2, ncols, nrows, fl2);
+		KLTSelectGoodFeatures(tc3, img3, ncols, nrows, fl3);
 		printf("\nIn first image:\n");
-		for (i = 0 ; i < fl->nFeatures ; i++)  {
+		for (i = 0 ; i < fl1->nFeatures ; i++)  {
 			printf("Feature #%d:  (%f,%f) with value of %d\n",
-			i, fl->feature[i]->x, fl->feature[i]->y,
-			fl->feature[i]->val);
+			i, fl1->feature[i]->x, fl1->feature[i]->y,
+			fl1->feature[i]->val);
+			printf("Feature #%d:  (%f,%f) with value of %d\n",
+			i, fl2->feature[i]->x, fl2->feature[i]->y,
+			fl2->feature[i]->val);
+			printf("Feature #%d:  (%f,%f) with value of %d\n",
+			i, fl3->feature[i]->x, fl3->feature[i]->y,
+			fl3->feature[i]->val);
 		}
 
-		KLTWriteFeatureListToPPM(fl, img1, ncols, nrows, "feat1.ppm");
-		KLTWriteFeatureList(fl, "feat1.txt", "%3d");
-
-		pgmWriteFile("thumb0000.pgm",prwr,ncols,nrows);
+		KLTWriteFeatureListToPPM(fl1, img1, ncols, nrows, "feat1r.ppm");
+		KLTWriteFeatureList(fl1, "feat1r.txt", "%3d");
+		KLTWriteFeatureListToPPM(fl2, img2, ncols, nrows, "feat1g.ppm");
+		KLTWriteFeatureList(fl2, "feat1g.txt", "%3d");
+		KLTWriteFeatureListToPPM(fl3, img3, ncols, nrows, "feat1b.ppm");
+		KLTWriteFeatureList(fl3, "feat1b.txt", "%3d");
+		pgmWriteFile("thumb0000r.pgm",prwr,ncols,nrows);
+		pgmWriteFile("thumb0000g.pgm",pgwr,ncols,nrows);
+		pgmWriteFile("thumb0000b.pgm",pbwr,ncols,nrows);
 		//pgmWriteFile("thumb0000.pgm",pr,headInfo.width,headInfo.height);
 		if(dbg == 1) {
 			for (i = 0; i <headInfo.width ; i++) {
@@ -217,6 +260,8 @@ int main(void) {
 		 
 		fclose(inp);
 		free(prwr);
+		free(pgwr);
+		free(pbwr);
 		free(pr);
 		free(pg);
 		free(pb);
