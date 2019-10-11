@@ -1,4 +1,5 @@
 clear
+close all
 I = imread("thumb0072.bmp");
 for i = 1:256
 for j= 1:256
@@ -38,3 +39,20 @@ colorbar
 pca3 = svd(im3);
 figure
 plot(pca3)
+c3 = corr(im3);
+figure
+imagesc(c3);
+colormap 'gray';
+colorbar
+sigma3c = var(im3,0,1);
+figure
+stem(sigma3c)
+
+sigma3r = var(im3,0,2);
+figure
+stem(sigma3r)
+
+sigma3cr = var(im3);
+figure
+stem(sigma3cr)
+
